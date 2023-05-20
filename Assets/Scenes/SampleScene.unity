@@ -569,6 +569,50 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 41465154}
   m_CullTransparentMesh: 1
+--- !u!1 &50343750
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 50343752}
+  - component: {fileID: 50343751}
+  m_Layer: 0
+  m_Name: FirestoreDatabaseManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &50343751
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 50343750}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e047b9a938431e439ee8c5368c77cf8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &50343752
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 50343750}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 897.88873, y: 645.3203, z: -12.981876}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &56877852
 GameObject:
   m_ObjectHideFlags: 0
@@ -916,7 +960,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2767123b2f624cd4e8e9e09f2c7a48da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dependencyStatus: 0
   emailLoginField: {fileID: 728009125}
   passwordLoginField: {fileID: 288471328}
   warningLoginText: {fileID: 1331667005}
@@ -932,6 +975,10 @@ MonoBehaviour:
   deathsField: {fileID: 56877854}
   scoreElement: {fileID: 1879445940651037232, guid: 829cd42e5df49e047a3a4afb1ba6859d, type: 3}
   scoreboardContent: {fileID: 1253624677}
+  dependencyStatus: 0
+  UseRealtimeDatabase: 1
+  realtimeDatabaseManager: {fileID: 475935444}
+  firestoreDatabaseManager: {fileID: 50343751}
 --- !u!1 &158508206
 GameObject:
   m_ObjectHideFlags: 0
@@ -2618,6 +2665,50 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Padding: {x: 0, y: 0, z: 0, w: 0}
   m_Softness: {x: 0, y: 0}
+--- !u!1 &475935443
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 475935445}
+  - component: {fileID: 475935444}
+  m_Layer: 0
+  m_Name: RealtimeDatabaseManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &475935444
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 475935443}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 677263445b013b94d97fd27889ffcdca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &475935445
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 475935443}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 897.88873, y: 645.3203, z: -12.981876}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &492179913
 GameObject:
   m_ObjectHideFlags: 0

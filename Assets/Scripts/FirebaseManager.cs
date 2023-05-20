@@ -38,6 +38,11 @@ public class FirebaseManager : MonoBehaviour
     public FirebaseUser User;
     public DatabaseReference DBreference;
 
+    [Header("Databases")]
+    public bool UseRealtimeDatabase = true;
+    public RealtimeDatabaseManager realtimeDatabaseManager;
+    public FirestoreDatabaseManager firestoreDatabaseManager;
+
     void Awake()
     {
         //Check that all of the necessary dependencies for Firebase are present on the system
@@ -287,15 +292,51 @@ public class FirebaseManager : MonoBehaviour
         }
     }
 
-    private void UpdateUsernameDatabase(string _username) { }
+    private void UpdateUsernameDatabase(string _username)
+    {
+        if (UseRealtimeDatabase)
+            StartCoroutine(realtimeDatabaseManager.UpdateUsernameDatabase(_username));
+        else
+            StartCoroutine(firestoreDatabaseManager.UpdateUsernameDatabase(_username));
+    }
 
-    private void UpdateXp(int _xp) { }
+    private void UpdateXp(int _xp)
+    {
+        if (UseRealtimeDatabase)
+            StartCoroutine(realtimeDatabaseManager.UpdateXp(_xp));
+        else
+            StartCoroutine(firestoreDatabaseManager.UpdateXp(_xp));
+    }
 
-    private void UpdateKills(int _kills) { }
+    private void UpdateKills(int _kills)
+    {
+        if (UseRealtimeDatabase)
+            StartCoroutine(realtimeDatabaseManager.UpdateKills(_kills));
+        else
+            StartCoroutine(firestoreDatabaseManager.UpdateKills(_kills));
+    }
 
-    private void UpdateDeaths(int _deaths) { }
+    private void UpdateDeaths(int _deaths)
+    {
+        if (UseRealtimeDatabase)
+            StartCoroutine(realtimeDatabaseManager.UpdateDeaths(_deaths));
+        else
+            StartCoroutine(firestoreDatabaseManager.UpdateDeaths(_deaths));
+    }
 
-    private void LoadUserData() { }
+    private void LoadUserData()
+    {
+        if (UseRealtimeDatabase)
+            StartCoroutine(realtimeDatabaseManager.LoadUserData());
+        else
+            StartCoroutine(firestoreDatabaseManager.LoadUserData());
+    }
 
-    private void LoadScoreboardData() { }
+    private void LoadScoreboardData()
+    {
+        if (UseRealtimeDatabase)
+            StartCoroutine(realtimeDatabaseManager.LoadScoreboardData());
+        else
+            StartCoroutine(firestoreDatabaseManager.LoadScoreboardData());
+    }
 }
