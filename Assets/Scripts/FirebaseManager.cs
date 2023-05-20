@@ -66,6 +66,14 @@ public class FirebaseManager : MonoBehaviour
             });
     }
 
+    public void SelectedDatabase(TMP_Dropdown dd)
+    {
+        if (dd.value == 0)
+            UseRealtimeDatabase = true;
+        else
+            UseRealtimeDatabase = false;
+    }
+
     private void InitializeFirebase()
     {
         Debug.Log("Setting up Firebase Auth");
