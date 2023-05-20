@@ -9,19 +9,22 @@ using System.Linq;
 public class RealtimeDatabaseManager : MonoBehaviour, DatabaseFunctions
 {
     FirebaseManager firebaseManager;
+    public DatabaseReference DBreference;
 
     void Awake()
     {
         firebaseManager = GameObject.FindObjectOfType<FirebaseManager>();
     }
 
+    public void InitializeFirebase()
+    {
+        DBreference = FirebaseDatabase.DefaultInstance.RootReference;
+    }
+
     public IEnumerator LoadScoreboardData()
     {
         //Get all the users data ordered by kills amount
-        var DBTask = firebaseManager.DBreference
-            .Child("users")
-            .OrderByChild("kills")
-            .GetValueAsync();
+        var DBTask = DBreference.Child("users").OrderByChild("kills").GetValueAsync();
 
         yield return new WaitUntil(predicate: () => DBTask.IsCompleted);
 
@@ -66,7 +69,7 @@ public class RealtimeDatabaseManager : MonoBehaviour, DatabaseFunctions
     public IEnumerator UpdateDeaths(int _deaths)
     {
         //Set the currently logged in user deaths
-        var DBTask = firebaseManager.DBreference
+        var DBTask = DBreference
             .Child("users")
             .Child(firebaseManager.User.UserId)
             .Child("deaths")
@@ -87,7 +90,7 @@ public class RealtimeDatabaseManager : MonoBehaviour, DatabaseFunctions
     public IEnumerator UpdateKills(int _kills)
     {
         //Set the currently logged in user kills
-        var DBTask = firebaseManager.DBreference
+        var DBTask = DBreference
             .Child("users")
             .Child(firebaseManager.User.UserId)
             .Child("kills")
@@ -108,7 +111,7 @@ public class RealtimeDatabaseManager : MonoBehaviour, DatabaseFunctions
     public IEnumerator UpdateXp(int _xp)
     {
         //Set the currently logged in user xp
-        var DBTask = firebaseManager.DBreference
+        var DBTask = DBreference
             .Child("users")
             .Child(firebaseManager.User.UserId)
             .Child("xp")
@@ -129,7 +132,7 @@ public class RealtimeDatabaseManager : MonoBehaviour, DatabaseFunctions
     public IEnumerator UpdateUsernameDatabase(string _username)
     {
         //Set the currently logged in user username in the database
-        var DBTask = firebaseManager.DBreference
+        var DBTask = DBreference
             .Child("users")
             .Child(firebaseManager.User.UserId)
             .Child("username")
@@ -150,10 +153,7 @@ public class RealtimeDatabaseManager : MonoBehaviour, DatabaseFunctions
     public IEnumerator LoadUserData()
     {
         //Get the currently logged in user data
-        var DBTask = firebaseManager.DBreference
-            .Child("users")
-            .Child(firebaseManager.User.UserId)
-            .GetValueAsync();
+        var DBTask = DBreference.Child("users").Child(firebaseManager.User.UserId).GetValueAsync();
 
         yield return new WaitUntil(predicate: () => DBTask.IsCompleted);
 

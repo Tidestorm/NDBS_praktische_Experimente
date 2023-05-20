@@ -36,7 +36,6 @@ public class FirebaseManager : MonoBehaviour
     public DependencyStatus dependencyStatus;
     public FirebaseAuth auth;
     public FirebaseUser User;
-    public DatabaseReference DBreference;
 
     [Header("Databases")]
     public bool UseRealtimeDatabase = true;
@@ -55,6 +54,8 @@ public class FirebaseManager : MonoBehaviour
                 {
                     //If they are avalible Initialize Firebase
                     InitializeFirebase();
+                    realtimeDatabaseManager.InitializeFirebase();
+                    firestoreDatabaseManager.InitializeFirebase();
                 }
                 else
                 {
@@ -70,7 +71,6 @@ public class FirebaseManager : MonoBehaviour
         Debug.Log("Setting up Firebase Auth");
         //Set the authentication instance object
         auth = FirebaseAuth.DefaultInstance;
-        DBreference = FirebaseDatabase.DefaultInstance.RootReference;
     }
 
     public void ClearLoginFeilds()
