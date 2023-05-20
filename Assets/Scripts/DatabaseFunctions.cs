@@ -4,5 +4,10 @@ using UnityEngine;
 
 public interface DatabaseFunctions
 {
-    void LoadUserData();
+    IEnumerator LoadUserData();
+    IEnumerator LoadScoreboardData();
+    IEnumerator UpdateDeaths(int _deaths);
+    IEnumerator UpdateKills(int _kills);
+    IEnumerator UpdateXp(int _xp);
+    IEnumerator UpdateUsernameDatabase(string _username);
 }

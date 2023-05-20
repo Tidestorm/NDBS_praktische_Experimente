@@ -8,13 +8,6 @@ using System.Linq;
 
 public class FirebaseManager : MonoBehaviour
 {
-    //Firebase variables
-    [Header("Firebase")]
-    public DependencyStatus dependencyStatus;
-    public FirebaseAuth auth;    
-    public FirebaseUser User;
-    public DatabaseReference DBreference;
-
     //Login variables
     [Header("Login")]
     public TMP_InputField emailLoginField;
@@ -39,22 +32,32 @@ public class FirebaseManager : MonoBehaviour
     public GameObject scoreElement;
     public Transform scoreboardContent;
 
+    [Header("Firebase data")]
+    public DependencyStatus dependencyStatus;
+    public FirebaseAuth auth;
+    public FirebaseUser User;
+    public DatabaseReference DBreference;
+
     void Awake()
     {
         //Check that all of the necessary dependencies for Firebase are present on the system
-        FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task =>
-        {
-            dependencyStatus = task.Result;
-            if (dependencyStatus == DependencyStatus.Available)
+        FirebaseApp
+            .CheckAndFixDependenciesAsync()
+            .ContinueWith(task =>
             {
-                //If they are avalible Initialize Firebase
-                InitializeFirebase();
-            }
-            else
-            {
-                Debug.LogError("Could not resolve all Firebase dependencies: " + dependencyStatus);
-            }
-        });
+                dependencyStatus = task.Result;
+                if (dependencyStatus == DependencyStatus.Available)
+                {
+                    //If they are avalible Initialize Firebase
+                    InitializeFirebase();
+                }
+                else
+                {
+                    Debug.LogError(
+                        "Could not resolve all Firebase dependencies: " + dependencyStatus
+                    );
+                }
+            });
     }
 
     private void InitializeFirebase()
@@ -64,11 +67,13 @@ public class FirebaseManager : MonoBehaviour
         auth = FirebaseAuth.DefaultInstance;
         DBreference = FirebaseDatabase.DefaultInstance.RootReference;
     }
+
     public void ClearLoginFeilds()
     {
         emailLoginField.text = "";
         passwordLoginField.text = "";
     }
+
     public void ClearRegisterFeilds()
     {
         usernameRegisterField.text = "";
@@ -83,12 +88,20 @@ public class FirebaseManager : MonoBehaviour
         //Call the login coroutine passing the email and password
         StartCoroutine(Login(emailLoginField.text, passwordLoginField.text));
     }
+
     //Function for the register button
     public void RegisterButton()
     {
         //Call the register coroutine passing the email, password, and username
-        StartCoroutine(Register(emailRegisterField.text, passwordRegisterField.text, usernameRegisterField.text));
+        StartCoroutine(
+            Register(
+                emailRegisterField.text,
+                passwordRegisterField.text,
+                usernameRegisterField.text
+            )
+        );
     }
+
     //Function for the sign out button
     public void SignOutButton()
     {
@@ -97,20 +110,22 @@ public class FirebaseManager : MonoBehaviour
         ClearRegisterFeilds();
         ClearLoginFeilds();
     }
+
     //Function for the save button
     public void SaveDataButton()
     {
         StartCoroutine(UpdateUsernameAuth(usernameField.text));
-        StartCoroutine(UpdateUsernameDatabase(usernameField.text));
+        UpdateUsernameDatabase(usernameField.text);
 
-        StartCoroutine(UpdateXp(int.Parse(xpField.text)));
-        StartCoroutine(UpdateKills(int.Parse(killsField.text)));
-        StartCoroutine(UpdateDeaths(int.Parse(deathsField.text)));
+        UpdateXp(int.Parse(xpField.text));
+        UpdateKills(int.Parse(killsField.text));
+        UpdateDeaths(int.Parse(deathsField.text));
     }
+
     //Function for the scoreboard button
     public void ScoreboardButton()
-    {        
-        StartCoroutine(LoadScoreboardData());
+    {
+        LoadScoreboardData();
     }
 
     private IEnumerator Login(string _email, string _password)
@@ -124,7 +139,8 @@ public class FirebaseManager : MonoBehaviour
         {
             //If there are errors handle them
             Debug.LogWarning(message: $"Failed to register task with {LoginTask.Exception}");
-            FirebaseException firebaseEx = LoginTask.Exception.GetBaseException() as FirebaseException;
+            FirebaseException firebaseEx =
+                LoginTask.Exception.GetBaseException() as FirebaseException;
             AuthError errorCode = (AuthError)firebaseEx.ErrorCode;
 
             string message = "Login Failed!";
@@ -156,7 +172,7 @@ public class FirebaseManager : MonoBehaviour
             Debug.LogFormat("User signed in successfully: {0} ({1})", User.DisplayName, User.Email);
             warningLoginText.text = "";
             confirmLoginText.text = "Logged In";
-            StartCoroutine(LoadUserData());
+            LoadUserData();
 
             yield return new WaitForSeconds(2);
 
@@ -175,12 +191,12 @@ public class FirebaseManager : MonoBehaviour
             //If the username field is blank show a warning
             warningRegisterText.text = "Missing Username";
         }
-        else if(passwordRegisterField.text != passwordRegisterVerifyField.text)
+        else if (passwordRegisterField.text != passwordRegisterVerifyField.text)
         {
             //If the password does not match show a warning
             warningRegisterText.text = "Password Does Not Match!";
         }
-        else 
+        else
         {
             //Call the Firebase auth signin function passing the email and password
             var RegisterTask = auth.CreateUserWithEmailAndPasswordAsync(_email, _password);
@@ -191,7 +207,8 @@ public class FirebaseManager : MonoBehaviour
             {
                 //If there are errors handle them
                 Debug.LogWarning(message: $"Failed to register task with {RegisterTask.Exception}");
-                FirebaseException firebaseEx = RegisterTask.Exception.GetBaseException() as FirebaseException;
+                FirebaseException firebaseEx =
+                    RegisterTask.Exception.GetBaseException() as FirebaseException;
                 AuthError errorCode = (AuthError)firebaseEx.ErrorCode;
 
                 string message = "Register Failed!";
@@ -221,7 +238,7 @@ public class FirebaseManager : MonoBehaviour
                 if (User != null)
                 {
                     //Create a user profile and set the username
-                    UserProfile profile = new UserProfile{DisplayName = _username};
+                    UserProfile profile = new UserProfile { DisplayName = _username };
 
                     //Call the Firebase auth update user profile function passing the profile with the username
                     var ProfileTask = User.UpdateUserProfileAsync(profile);
@@ -231,14 +248,16 @@ public class FirebaseManager : MonoBehaviour
                     if (ProfileTask.Exception != null)
                     {
                         //If there are errors handle them
-                        Debug.LogWarning(message: $"Failed to register task with {ProfileTask.Exception}");
+                        Debug.LogWarning(
+                            message: $"Failed to register task with {ProfileTask.Exception}"
+                        );
                         warningRegisterText.text = "Username Set Failed!";
                     }
                     else
                     {
                         //Username is now set
                         //Now return to login screen
-                        UIManager.instance.LoginScreen();                        
+                        UIManager.instance.LoginScreen();
                         warningRegisterText.text = "";
                         ClearRegisterFeilds();
                         ClearLoginFeilds();
@@ -265,143 +284,18 @@ public class FirebaseManager : MonoBehaviour
         else
         {
             //Auth username is now updated
-        }        
-    }
-
-    private IEnumerator UpdateUsernameDatabase(string _username)
-    {
-        //Set the currently logged in user username in the database
-        var DBTask = DBreference.Child("users").Child(User.UserId).Child("username").SetValueAsync(_username);
-
-        yield return new WaitUntil(predicate: () => DBTask.IsCompleted);
-
-        if (DBTask.Exception != null)
-        {
-            Debug.LogWarning(message: $"Failed to register task with {DBTask.Exception}");
-        }
-        else
-        {
-            //Database username is now updated
         }
     }
 
-    private IEnumerator UpdateXp(int _xp)
-    {
-        //Set the currently logged in user xp
-        var DBTask = DBreference.Child("users").Child(User.UserId).Child("xp").SetValueAsync(_xp);
+    private void UpdateUsernameDatabase(string _username) { }
 
-        yield return new WaitUntil(predicate: () => DBTask.IsCompleted);
+    private void UpdateXp(int _xp) { }
 
-        if (DBTask.Exception != null)
-        {
-            Debug.LogWarning(message: $"Failed to register task with {DBTask.Exception}");
-        }
-        else
-        {
-            //Xp is now updated
-        }
-    }
+    private void UpdateKills(int _kills) { }
 
-    private IEnumerator UpdateKills(int _kills)
-    {
-        //Set the currently logged in user kills
-        var DBTask = DBreference.Child("users").Child(User.UserId).Child("kills").SetValueAsync(_kills);
+    private void UpdateDeaths(int _deaths) { }
 
-        yield return new WaitUntil(predicate: () => DBTask.IsCompleted);
+    private void LoadUserData() { }
 
-        if (DBTask.Exception != null)
-        {
-            Debug.LogWarning(message: $"Failed to register task with {DBTask.Exception}");
-        }
-        else
-        {
-            //Kills are now updated
-        }
-    }
-
-    private IEnumerator UpdateDeaths(int _deaths)
-    {
-        //Set the currently logged in user deaths
-        var DBTask = DBreference.Child("users").Child(User.UserId).Child("deaths").SetValueAsync(_deaths);
-
-        yield return new WaitUntil(predicate: () => DBTask.IsCompleted);
-
-        if (DBTask.Exception != null)
-        {
-            Debug.LogWarning(message: $"Failed to register task with {DBTask.Exception}");
-        }
-        else
-        {
-            //Deaths are now updated
-        }
-    }
-
-    private IEnumerator LoadUserData()
-    {
-        //Get the currently logged in user data
-        var DBTask = DBreference.Child("users").Child(User.UserId).GetValueAsync();
-
-        yield return new WaitUntil(predicate: () => DBTask.IsCompleted);
-
-        if (DBTask.Exception != null)
-        {
-            Debug.LogWarning(message: $"Failed to register task with {DBTask.Exception}");
-        }
-        else if (DBTask.Result.Value == null)
-        {
-            //No data exists yet
-            xpField.text = "0";
-            killsField.text = "0";
-            deathsField.text = "0";
-        }
-        else
-        {
-            //Data has been retrieved
-            DataSnapshot snapshot = DBTask.Result;
-
-            xpField.text = snapshot.Child("xp").Value.ToString();
-            killsField.text = snapshot.Child("kills").Value.ToString();
-            deathsField.text = snapshot.Child("deaths").Value.ToString();
-        }
-    }
-
-    private IEnumerator LoadScoreboardData()
-    {
-        //Get all the users data ordered by kills amount
-        var DBTask = DBreference.Child("users").OrderByChild("kills").GetValueAsync();
-
-        yield return new WaitUntil(predicate: () => DBTask.IsCompleted);
-
-        if (DBTask.Exception != null)
-        {
-            Debug.LogWarning(message: $"Failed to register task with {DBTask.Exception}");
-        }
-        else
-        {
-            //Data has been retrieved
-            DataSnapshot snapshot = DBTask.Result;
-
-            //Destroy any existing scoreboard elements
-            foreach (Transform child in scoreboardContent.transform)
-            {
-                Destroy(child.gameObject);
-            }
-
-            //Loop through every users UID
-            foreach (DataSnapshot childSnapshot in snapshot.Children.Reverse<DataSnapshot>())
-            {
-                string username = childSnapshot.Child("username").Value.ToString();
-                int kills = int.Parse(childSnapshot.Child("kills").Value.ToString());
-                int deaths = int.Parse(childSnapshot.Child("deaths").Value.ToString());
-                int xp = int.Parse(childSnapshot.Child("xp").Value.ToString());
-
-                //Instantiate new scoreboard elements
-                GameObject scoreboardElement = Instantiate(scoreElement, scoreboardContent);
-                scoreboardElement.GetComponent<ScoreElement>().NewScoreElement(username, kills, deaths, xp);
-            }
-
-            //Go to scoareboard screen
-            UIManager.instance.ScoreboardScreen();
-        }
-    }
+    private void LoadScoreboardData() { }
 }
