@@ -68,6 +68,23 @@ public class FirestoreDatabaseManager : MonoBehaviour, DatabaseFunctions
 
     public IEnumerator LoadUserData()
     {
+        // Querry für Nutzer mit x kills
+        /*
+            DBTask.Collection("users")
+            .WhereGreaterThan("kills", "5")
+            .WhereLessThan("deaths", "4")
+            .GetSnapshotAsync()
+            .ContinueWithOnMainThread(task =>
+            {
+                QuerySnapshot snapshot = task.Result;
+                foreach (DocumentSnapshot user in snapshot.Documents)
+                {
+                    Debug.Log($"User {user.Id} hat mehr als 5 kills und weniger als 4 deaths!");
+                }
+            });
+
+        */
+
         yield return new WaitForSeconds(0.1f);
         // Load user's data from the database
         DocumentReference userRef = DBreference
